@@ -1,8 +1,10 @@
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.List;
 
 public class ObjectCreator {
 
@@ -49,7 +51,7 @@ public class ObjectCreator {
 			}
 			else if(userChoice == 1){
 				System.out.println("Creating simple object");
-				objectsToSerialize.add(createSimpleObject(new PrimitiveOnlyType(0)));
+				objectsToSerialize.add(createSimpleObject(new PrimitiveOnlyType()));
 			}
 			else if(userChoice == 2){
 				System.out.println("Creating object with references to other objects");
@@ -67,7 +69,7 @@ public class ObjectCreator {
 			}
 			else if(userChoice == 5){
 				System.out.println("Creating object that uses an instance of Java collection classes");
-				
+				objectsToSerialize.add(createSimpleObject(new CollectionsType()));
 			}
 			
 			
@@ -261,43 +263,53 @@ public class ObjectCreator {
 				
 				else{
 					
-					System.out.println("Field " + i + " is an Object reference");
+					if(currentField.getType().equals(List.class)){
+						handleCollectionsClass(currentField, fieldObject, i);
+					}
+					
+					else{
 					
 					
-					Object objToRecurseOn;
-					
-					while(true) {
+						System.out.println("Field " + i + " is an Object reference");
 						
-						System.out.println("Choose an object for the field value");
-						System.out.println("Enter 1 for ObjectA");
-						System.out.println("Enter 2 for ObjectB");
+						
+						
+						Object objToRecurseOn;
+						
+						while(true) {
 							
-						line = userInput.nextLine();
-						
-
-
-						if(line.equals("1")) {
-							objToRecurseOn = new ObjectA();
-						}
-						else if(line.equals("2")) {
-							objToRecurseOn = new ObjectB();
-						}
-						else {
-							System.out.println("Invalid value entered");
-							continue;
-						}
-						
-						break;
-					}		
-						
-						try {
-							currentField.set(obj, createSimpleObject(objToRecurseOn));
-						} catch (IllegalArgumentException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IllegalAccessException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							System.out.println("Choose an object for the field value");
+							System.out.println("Enter 1 for ObjectA");
+							System.out.println("Enter 2 for ObjectB");
+								
+							line = userInput.nextLine();
+							
+	
+	
+							if(line.equals("1")) {
+								objToRecurseOn = new ObjectA();
+							}
+							else if(line.equals("2")) {
+								objToRecurseOn = new ObjectB();
+							}
+							else {
+								System.out.println("Invalid value entered");
+								continue;
+							}
+							
+							break;
+						}		
+							
+							try {
+								currentField.set(obj, createSimpleObject(objToRecurseOn));
+							} catch (IllegalArgumentException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IllegalAccessException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
 						}
 						
 					}
@@ -307,14 +319,58 @@ public class ObjectCreator {
 			}
 
 		
-//		try {
-//		System.out.println(objClass.getDeclaredField("stringList").get(obj) );
-//	} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-//		e.printStackTrace();
-//	}
-		
 		return obj;
 	
+	}
+	
+	
+	
+	public void handleCollectionsClass(Field collectionField, Object collectionObj, int fieldIndex){
+		
+		List<Object> collectionObjList = (List)collectionObj;
+		
+		System.out.println("Field " + fieldIndex + " is a collections class holding object references");
+		int numObjectsAdded = 0;
+						
+		while(true){
+			
+			System.out.println("Choose an object for index " + numObjectsAdded);
+			System.out.println("Enter 0 to stop filling in collections class");
+			System.out.println("Enter 1 for ObjectA");
+			System.out.println("Enter 2 for ObjectB");
+				
+			line = userInput.nextLine();
+			
+			Object objToRecurseOn;		
+
+			if(line.equals("1")) {
+				objToRecurseOn = new ObjectA();
+			}
+			else if(line.equals("2")) {
+				objToRecurseOn = new ObjectB();
+			}
+			else if(line.equals("0")) {
+				System.out.println("Done filling in collections class");
+				break;
+			}
+			else{
+				System.out.println("Invalid value entered");
+				continue;
+			}
+			
+			numObjectsAdded++;
+		
+			collectionObjList.add(createSimpleObject(objToRecurseOn));
+			
+		}		
+			
+		
+			
+
+
+		
+		
+		
 	}
 		
 

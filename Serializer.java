@@ -62,7 +62,14 @@ public void serializeCurrentObject(Object obj, int ID){
 	Vector<Pair<Object, Integer>> referencesToSerialize = new Vector<Pair<Object, Integer>>();
 	
 	Element objElement = new Element("object");
-	objElement.setAttribute("class", obj.getClass().getName());
+	
+	try{
+		objElement.setAttribute("class", obj.getClass().getName());
+	}
+	catch(NullPointerException e){
+		objElement.setAttribute("class", "null");
+		return;
+	}
 	
 	objElement.setAttribute("id", String.valueOf(ID));
 	objectsSerialized.put(obj, ID);
