@@ -12,7 +12,7 @@ public class ChooseDocuments {
 
 	int userFileCount = 0;
 	
-	Scanner userInput;
+	Scanner userInputScan;
 	
 	Document[] docList;
 	
@@ -26,7 +26,7 @@ public class ChooseDocuments {
 		
 		this.docList = docList;
 		
-		userInput = new Scanner(System.in);
+		userInputScan = new Scanner(System.in);
 	}
 	
 	
@@ -43,7 +43,7 @@ public class ChooseDocuments {
 			System.out.println("Document " + i);
 			}
 		
-			line = userInput.nextLine();
+			line = userInputScan.nextLine();
 			
 			int userInput = 0;
 			try{
@@ -69,6 +69,7 @@ public class ChooseDocuments {
 			chooseDocumentAction(docList[userInput]);	
 		}
 		
+		
 	}
 	
 	
@@ -82,7 +83,7 @@ public class ChooseDocuments {
 			System.out.println("Enter 2 to make document elgible for sending over a network connection");
 
 			
-			line = userInput.nextLine();
+			line = userInputScan.nextLine();
 			
 			int userInput = 0;
 			try{

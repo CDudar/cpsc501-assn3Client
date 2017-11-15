@@ -75,18 +75,9 @@ public class ObjectCreator {
 			
 			System.out.println("");
 			
-			for(int i = 0; i < objectsToSerialize.size(); i++){
-				Object currentObject = objectsToSerialize.get(i);
-				if( currentObject instanceof ArrayOfObjectReferencesType ){
-					System.out.println( ((ArrayOfObjectReferencesType)currentObject).objReferences[0]);
-					System.out.println( ((ObjectB)(((ArrayOfObjectReferencesType)currentObject).objReferences[1])).test );
-				}
-				
-			}
-			
 			
 		}
-
+		
 		return objectsToSerialize;
 		
 	}
